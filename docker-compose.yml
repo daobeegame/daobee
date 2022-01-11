@@ -1,0 +1,71 @@
+version: "3.4"
+
+services:
+  daobee_dev_wasp:
+    build:
+      context: .
+      dockerfile: ./docker/wasp/Dockerfile
+    container_name: daobee_dev_wasp
+    environment:
+      - WASP_CLI_WASP_API_ADDRESS=daobee_dev_wasp:9090
+      - WASP_CLI_WASP_NANOMSG_ADDRESS=127.0.0.1:5550
+      - WASP_CLI_WASP_PEERING_ADDRESS=127.0.0.1:4000
+      - WASP_CLI_GOSHIMER_API_ADDRESS=daobee_dev_goshimmer:8080
+      - WASP_CLI_FAUCET_POW_TARGET=-1
+      - USE_EVM=1
+      - EVM_CHAIN_NAME=evm_chain
+      - EVM_CHAIN_DESCRIPTION=EVM-CHAIN
+      - EVM_CHAIN_TOKEN_DEPOSIT=10000
+      - EVM_CHAIN_ALLOC_ADDRESS=0xB6b6BB13151B85e3eDBd1F9903de4e2606F95a3F
+      - EVM_CHAIN_ALLOC_TOKENS=1000000000000000000000000
+      - EVM_CHAIN_ID=1074
+      - EVM_FLAVOUR=evmlight
+      - EVM_START_JSONRPC=0
+    networks:
+      - daobee-devnet
+    volumes:
+      - wasp:/wasp
+      - ./src:/src
+      - ./deps:/deps
+      - ./data/wasp/wasp.config.json:/etc/wasp_config.json
+    ports:
+      - "4000:4000/tcp" # Peering
+      - "5550:5550/tcp" # Nano MSG
+      - "7000:7000/tcp" # Wasp Dashboard
+      - "9090:9090/tcp" # Wasp WebAPI
+      - "8545:8545/tcp" # Wasp-CLI EVM
+
+  daobee_dev_goshimmer:
+    restart: always
+    container_name: daobee_dev_goshimmer
+    networks:
+      - daobee-devnet
+    image: lukasmoe/goshimmer:wasp-testnet-additions
+    stop_grace_period: 1m
+    command: >
+      --config=/tmp/config.json
+      --database.directory=/tmp/devnetdb
+      --mana.snapshotResetTime=true
+      --node.seed=base64:B6X+8atnQMtab7K9zbiBL9NzPe8SMzsmLFzpSvKrl6I=
+      --messageLayer.snapshot.file=/tmp/snapshot.bin
+      --messageLayer.snapshot.genesisNode=
+      --messageLayer.startSynced=true
+    volumes:
+      - goshimmer-db:/tmp/devnetdb
+      - ./data/goshimmer/goshimmer.config.json:/tmp/config.json:ro
+      - ./data/goshimmer/snapshot.bin:/tmp/snapshot.bin:ro
+    ports:
+      - "5000:5000/tcp" # TX Stream
+      - "8080:8080/tcp" # GoShimmer API
+      - "8081:8081/tcp" # GoShimmer Dashboard
+      - "9000:9000/tcp" # Analysis Dashboard
+      - "9312:9312/tcp" # Prometheus
+
+volumes:
+  goshimmer-db:
+    name: goshimmer-db
+  wasp:
+    name: wasp
+
+networks:
+  daobee-devnet: {}

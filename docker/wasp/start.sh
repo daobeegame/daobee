@@ -93,7 +93,7 @@ if [[ ${USE_EVM} == 1 ]]; then
         touch /wasp/evm-deployed
     fi
     if [[ ${EVM_START_JSONRPC} == 1 ]]; then
-        wasp-cli chain evm jsonrpc --name evmlight --chainid "${EVM_CHAIN_ID}" -c /etc/wasp-cli.json &
+        wasp-cli chain evm jsonrpc --name evmlight -c /etc/wasp-cli.json &
     fi
 fi
 

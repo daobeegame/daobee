@@ -20,7 +20,7 @@ services:
       - EVM_CHAIN_ALLOC_TOKENS=1000000000000000000000000
       - EVM_CHAIN_ID=1074
       - EVM_FLAVOUR=evmlight
-      - EVM_START_JSONRPC=0
+      - EVM_START_JSONRPC=1
     networks:
       - daobee-devnet
     volumes:

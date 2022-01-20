@@ -10,7 +10,7 @@ services:
       - WASP_CLI_WASP_API_ADDRESS=daobee_dev_wasp:9090
       - WASP_CLI_WASP_NANOMSG_ADDRESS=127.0.0.1:5550
       - WASP_CLI_WASP_PEERING_ADDRESS=127.0.0.1:4000
-      - WASP_CLI_GOSHIMER_API_ADDRESS=daobee_dev_goshimmer:8080
+      - WASP_CLI_GOSHIMER_API_ADDRESS=https://api.goshimmer.sc.iota.org
       - WASP_CLI_FAUCET_POW_TARGET=-1
       - USE_EVM=1
       - EVM_CHAIN_NAME=evm_chain

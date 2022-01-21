@@ -1,3 +1,4 @@
 [submodule "deps/wasp"]
 	path = deps/wasp
 	url = https://github.com/iotaledger/wasp
+	branch = develop

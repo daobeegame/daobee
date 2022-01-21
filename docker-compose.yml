@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   daobee_dev_wasp:
+    restart: always
     build:
       context: .
       dockerfile: ./docker/wasp/Dockerfile
